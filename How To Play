@@ -1,4 +1,9 @@
 Movment  - wasd
-Set Flat - 2
-Set Factories - 1
+Set Flat - 2 cost = 10
+Set Factories - 1 cost = 1000
 Space To Sell
+Ctrl to take Tax
+gas station - 3 cost = 120(neede for uper a sale cost)
+shop - 4 cost = 200(need for uper Happy level
+generators - 5 cost = 500
+Centre - 6 cost = 10000

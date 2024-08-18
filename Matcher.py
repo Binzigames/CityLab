@@ -1,14 +1,22 @@
+
 # stats
-money = 100
+money = 1000
 peoples = 0
 ecology = 100
 product = 0
 seals = 0
+tax = 10
+PeoplesHapines = 100
+Volts = 0
 
-
+TotalTax = 0
 product_cost = 10
+TotalShops = 2
+VoltsToHouse = 1
 
 factories = 0
+GasStations = 0
+shops = 0
 
 #match things
 def AddMoney(MoneyToAdd):
@@ -30,5 +38,13 @@ def MinusPeoples(PeoplesToMinus):
         global peoples
         peoples -= PeoplesToMinus
         print(f"- peoples {PeoplesToMinus}")
+
+
+
+
+
+
+
+
 
 

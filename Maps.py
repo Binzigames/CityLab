@@ -47,6 +47,10 @@ sand = ("Sand.png")
 factory = ("factory.png")
 Flat = ("Flat.png")
 forest = ("tree.png")
+GasStation = ("gas station.png")
+shop = ("shop.png")
+elecricyty=("electrycity.png")
+Centre=("BiznesCentre.png")
 
 #cursor
 cursor = ("cursor.png")
