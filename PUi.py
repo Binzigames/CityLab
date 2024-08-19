@@ -5,7 +5,7 @@ import pygame
 import pygame
 
 
-def DrawUi(screen, position, money, peoples, products, eco, happiness , volts):
+def DrawUi(screen, position, money, peoples, products, eco, happiness , volts , water):
     """
     Draws the user interface on the screen, displaying the current stats.
 
@@ -31,7 +31,9 @@ def DrawUi(screen, position, money, peoples, products, eco, happiness , volts):
         f"products : {products}",
         f"eco : %{eco}",
         f"hapynes : %{happiness}",
-        f"Volts : {volts}"
+        f"Volts : {volts}",
+        f"Water : {water}"
+
     ]
 
     positions = [
@@ -40,7 +42,8 @@ def DrawUi(screen, position, money, peoples, products, eco, happiness , volts):
         (position[0] + 10, position[1] + 90),
         (position[0] + 10, position[1] + 130),
         (position[0] + 700, position[1] + 10),
-        (position[0] + 700, position[1] + 50)
+        (position[0] + 700, position[1] + 50),
+        (position[0] + 700, position[1] + 90)
     ]
 
     # Render and draw each text surface

@@ -51,6 +51,7 @@ GasStation = ("gas station.png")
 shop = ("shop.png")
 elecricyty=("electrycity.png")
 Centre=("BiznesCentre.png")
+water= ("water Tower.png")
 
 #cursor
 cursor = ("cursor.png")

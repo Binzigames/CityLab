@@ -27,7 +27,8 @@ images = {
     "GasStation": pygame.image.load(Maps.GasStation).convert_alpha(),
     "shop": pygame.image.load(Maps.shop).convert_alpha(),
     "generetor": pygame.image.load(Maps.elecricyty).convert_alpha(),
-    "centre": pygame.image.load(Maps.Centre).convert_alpha()
+    "centre": pygame.image.load(Maps.Centre).convert_alpha(),
+    "water": pygame.image.load(Maps.water).convert_alpha()
 }
 
 def draw_map():
@@ -63,6 +64,10 @@ def draw_buildings():
                 screen.blit(images["generetor"], pos)
             elif cell == 7:
                 screen.blit(images["centre"], pos)
+            elif cell == 8:
+                screen.blit(images["centre"], pos)
+            elif cell == 9:
+                screen.blit(images["water"], pos)
 
 def draw_cursor():
     cell_size = Maps.CellSize
@@ -77,6 +82,12 @@ rows = 9
 # Main loop
 running = True
 while running:
+    Matcher.generate_power()
+    Matcher.VoltsToHouses()
+    Matcher.happiness_destroy()
+    Matcher.generate_water()
+    Matcher.WaterToHouses()
+
     if Matcher.factories > 0:
         Matcher.product += 0.5 * Matcher.factories
     if Matcher.product >= 1000:
@@ -133,11 +144,20 @@ while running:
             elif event.key == pygame.K_5 and Matcher.money >= 500:
                 Maps.MapBuilds[cursor_y][cursor_x] = 6
                 Matcher.MinusMoney(500)
-                Matcher.Volts += 1000
+                Matcher.Volts += 100
+                Matcher.generators += 1
             elif event.key == pygame.K_6 and Matcher.money >= 10000:
                 IsCentreBought = True
                 Maps.MapBuilds[cursor_y][cursor_x] = 7
                 Matcher.MinusMoney(10000)
+            elif event.key == pygame.K_7 and Matcher.money >= 500:
+                Maps.MapBuilds[cursor_y][cursor_x] = 9
+                Matcher.MinusMoney(500)
+                Matcher.water_towerwers += 1
+
+
+
+
             elif event.key == pygame.K_SPACE:
                 if Matcher.product > 0:
                     total_sale = Matcher.product_cost * Matcher.product
@@ -161,7 +181,7 @@ while running:
     draw_map()
     draw_buildings()
     draw_cursor()
-    PUi.DrawUi(screen, (0, 600), Matcher.money, Matcher.peoples, Matcher.product, Matcher.ecology, Matcher.PeoplesHapines, Matcher.Volts)
+    PUi.DrawUi(screen, (0, 600), Matcher.money, Matcher.peoples, Matcher.product, Matcher.ecology, Matcher.PeoplesHapines, Matcher.Volts , Matcher.Water)
 
     # Update the display
     pygame.display.update()
