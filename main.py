@@ -87,17 +87,17 @@ while running:
     Matcher.happiness_destroy()
     Matcher.generate_water()
     Matcher.WaterToHouses()
+    Matcher.hapynes_add()
 
     if Matcher.factories > 0:
         Matcher.product += 0.5 * Matcher.factories
     if Matcher.product >= 1000:
         Matcher.ecology -= 0.1
-        Matcher.PeoplesHapines -= 0.1
-    if Matcher.product == 1000 and IsCentreBought:
+        Matcher.PeoplesHapines -= 10
+    if Matcher.product > 900 and IsCentreBought:
         total_sale = Matcher.product_cost * Matcher.product
-        Matcher.product_cost += Matcher.money
-        Matcher.product = 0
         Matcher.AddMoney(total_sale)
+        Matcher.product = 0
 
     # Handle events
     for event in pygame.event.get():
@@ -146,7 +146,7 @@ while running:
                 Matcher.MinusMoney(500)
                 Matcher.Volts += 100
                 Matcher.generators += 1
-            elif event.key == pygame.K_6 and Matcher.money >= 10000:
+            elif event.key == pygame.K_6 and Matcher.money >= 10000 and not IsCentreBought :
                 IsCentreBought = True
                 Maps.MapBuilds[cursor_y][cursor_x] = 7
                 Matcher.MinusMoney(10000)
@@ -182,6 +182,7 @@ while running:
     draw_buildings()
     draw_cursor()
     PUi.DrawUi(screen, (0, 600), Matcher.money, Matcher.peoples, Matcher.product, Matcher.ecology, Matcher.PeoplesHapines, Matcher.Volts , Matcher.Water)
+    PUi.DrawPicture(screen ,(0, 600) )
 
     # Update the display
     pygame.display.update()

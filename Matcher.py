@@ -57,9 +57,13 @@ def VoltsToHouses():
         PeoplesHapines -= 0.1
 
 def happiness_destroy():
-    global PeoplesHapines, peoples
-    if PeoplesHapines < 0:
-        peoples -= 1
+    global PeoplesHapines, peoples , ecology
+    if peoples > 0:
+        if PeoplesHapines < 0:
+            peoples -= 1
+        if ecology < 20:
+            peoples -= 1
+
 
 def generate_water():
     global Water, water_towerwers
@@ -73,7 +77,13 @@ def WaterToHouses():
         NeedToPayWater = peoples * 0.5
         Water -= NeedToPayWater
     if Water < 0 :
-        PeoplesHapines -= 0.1
+        PeoplesHapines -= 1
+
+def hapynes_add():
+    global PeoplesHapines,shops
+    if PeoplesHapines < 100 and shops > 0:
+        totalHapnes = shops * 0.5
+        PeoplesHapines += totalHapnes
 
 
 

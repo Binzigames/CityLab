@@ -1,23 +1,6 @@
 import pygame
-
-import pygame
-
-import pygame
-
-
-def DrawUi(screen, position, money, peoples, products, eco, happiness , volts , water):
-    """
-    Draws the user interface on the screen, displaying the current stats.
-
-    Args:
-        screen (pygame.Surface): The Pygame screen surface to draw on.
-        position (tuple): The (x, y) position to start drawing the UI.
-        money (int): The amount of money.
-        peoples (int): The number of people.
-        products (int): The number of products.
-        eco (int): The eco percentage.
-        happiness (int): The happiness percentage.
-    """
+import Matcher
+def DrawUi(screen, position, money, peoples, products, eco, happiness, volts, water):
     # Draw background rectangle
     pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(position, (1200, 300)))
 
@@ -30,10 +13,9 @@ def DrawUi(screen, position, money, peoples, products, eco, happiness , volts , 
         f"peoples : {peoples}",
         f"products : {products}",
         f"eco : %{eco}",
-        f"hapynes : %{happiness}",
+        f"happiness : %{happiness}",
         f"Volts : {volts}",
         f"Water : {water}"
-
     ]
 
     positions = [
@@ -41,9 +23,9 @@ def DrawUi(screen, position, money, peoples, products, eco, happiness , volts , 
         (position[0] + 10, position[1] + 50),
         (position[0] + 10, position[1] + 90),
         (position[0] + 10, position[1] + 130),
-        (position[0] + 700, position[1] + 10),
-        (position[0] + 700, position[1] + 50),
-        (position[0] + 700, position[1] + 90)
+        (position[0] + 10, position[1] + 170),
+        (position[0] + 10, position[1] + 210),
+        (position[0] + 10, position[1] + 250)
     ]
 
     # Render and draw each text surface
@@ -52,4 +34,20 @@ def DrawUi(screen, position, money, peoples, products, eco, happiness , volts , 
         text_rect = text_surface.get_rect(topleft=pos)
         screen.blit(text_surface, text_rect)
 
+def DrawPicture(screen,position , ecology):
+    try:
+        StandartPanorama = pygame.image.load("panarama_city.png").convert_alpha(),
+        DirtyPanrama = pygame.image.load("panarama_dirty_city.png").convert_alpha()
+    except pygame.error as e:
+        print(f"Unable to load image: {e}")
+        return
+    corect_panarama = None
+    isStart= True
+    if isStart:
+        corect_panarama = StandartPanorama
+    if ecology < 20:
+        corect_panarama = DirtyPanrama
 
+    scaled_image = pygame.transform.scale(corect_panarama, (480, 300))
+    picture_position = (position[0] + 500, position[1] + 0)
+    screen.blit(scaled_image, picture_position)
