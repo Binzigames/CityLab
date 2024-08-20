@@ -3,6 +3,8 @@ import sys
 import Maps
 import PUi
 import Matcher
+import Saver
+from datetime import datetime
 
 # Initialize Pygame
 pygame.init()
@@ -15,6 +17,7 @@ pygame.display.set_caption("CityLab!")
 
 # Initialize building status
 IsCentreBought = False
+IsPaused = False
 
 # Load images
 images = {
@@ -30,6 +33,16 @@ images = {
     "centre": pygame.image.load(Maps.Centre).convert_alpha(),
     "water": pygame.image.load(Maps.water).convert_alpha()
 }
+
+# Generate unique save name based on current date and time
+now = datetime.now()
+date_string = now.strftime('%Y-%m-%d_%H-%M-%S')
+save_name = "save_" + date_string
+
+# Initialize cursor position
+cursor_x, cursor_y = 0, 0
+columns = 15
+rows = 9
 
 def draw_map():
     cell_size = Maps.CellSize
@@ -74,21 +87,46 @@ def draw_cursor():
     pos = (cursor_x * cell_size, cursor_y * cell_size)
     screen.blit(images["cursor"], pos)
 
-# Initialize cursor position
-cursor_x, cursor_y = 0, 0
-columns = 15
-rows = 9
+def draw_pause_menu():
+    overlay = pygame.Surface((SCREEN_X, SCREEN_Y))
+    overlay.set_alpha(150)
+    overlay.fill((0, 0, 0))
+    screen.blit(overlay, (0, 0))
+
+    font = pygame.font.Font(None, 74)
+    text = font.render("Paused", True, (255, 255, 255))
+    screen.blit(text, (SCREEN_X // 2 - text.get_width() // 2, SCREEN_Y // 2 - text.get_height() // 2))
+
+    resume_text = font.render("Press ESC to Resume", True, (255, 255, 255))
+    screen.blit(resume_text, (SCREEN_X // 2 - resume_text.get_width() // 2, SCREEN_Y // 2 + 130))
+    save_text = font.render("Press TAB to SaveGame", True, (255, 255, 255))
+    screen.blit(save_text, (SCREEN_X // 2 - save_text.get_width() // 2, SCREEN_Y // 2 + 180))
+    load_text = font.render("Press L to LoadGame", True, (255, 255, 255))
+    screen.blit(load_text, (SCREEN_X // 2 - load_text.get_width() // 2, SCREEN_Y // 2 + 230))
 
 # Main loop
 running = True
 while running:
-    Matcher.generate_power()
-    Matcher.VoltsToHouses()
-    Matcher.happiness_destroy()
-    Matcher.generate_water()
-    Matcher.WaterToHouses()
-    Matcher.hapynes_add()
+    if IsPaused:
+        draw_pause_menu()
+        pygame.display.update()
 
+        # Handle events while paused
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    IsPaused = False
+                elif event.key == pygame.K_TAB:
+                    Saver.SaveGame(save_name)
+                    print("game Saved")
+                elif event.key == pygame.K_l:
+                    Saver.LoadGame(save_name)
+                    print("game loaded  :" + save_name)
+        continue
+
+    # Game logic
     if Matcher.factories > 0:
         Matcher.product += 0.5 * Matcher.factories
     if Matcher.product >= 1000:
@@ -98,6 +136,13 @@ while running:
         total_sale = Matcher.product_cost * Matcher.product
         Matcher.AddMoney(total_sale)
         Matcher.product = 0
+
+    Matcher.generate_power()
+    Matcher.VoltsToHouses()
+    Matcher.happiness_destroy()
+    Matcher.generate_water()
+    Matcher.WaterToHouses()
+    Matcher.hapynes_add()
 
     # Handle events
     for event in pygame.event.get():
@@ -146,7 +191,7 @@ while running:
                 Matcher.MinusMoney(500)
                 Matcher.Volts += 100
                 Matcher.generators += 1
-            elif event.key == pygame.K_6 and Matcher.money >= 10000 and not IsCentreBought :
+            elif event.key == pygame.K_6 and Matcher.money >= 10000 and not IsCentreBought:
                 IsCentreBought = True
                 Maps.MapBuilds[cursor_y][cursor_x] = 7
                 Matcher.MinusMoney(10000)
@@ -155,8 +200,8 @@ while running:
                 Matcher.MinusMoney(500)
                 Matcher.water_towerwers += 1
 
-
-
+            elif event.key == pygame.K_ESCAPE:
+                IsPaused = not IsPaused
 
             elif event.key == pygame.K_SPACE:
                 if Matcher.product > 0:
@@ -172,7 +217,8 @@ while running:
                 if Matcher.peoples > 0:
                     Matcher.PeoplesHapines -= 1
 
-                print(f"shops: {Matcher.shops}, TotalShops: {Matcher.TotalShops}, PeoplesHapines: {Matcher.PeoplesHapines}")
+                print(
+                    f"shops: {Matcher.shops}, TotalShops: {Matcher.TotalShops}, PeoplesHapines: {Matcher.PeoplesHapines}")
 
     # Clear the screen
     screen.fill((0, 0, 0))
@@ -181,8 +227,9 @@ while running:
     draw_map()
     draw_buildings()
     draw_cursor()
-    PUi.DrawUi(screen, (0, 600), Matcher.money, Matcher.peoples, Matcher.product, Matcher.ecology, Matcher.PeoplesHapines, Matcher.Volts , Matcher.Water)
-    PUi.DrawPicture(screen ,(0, 600) )
+    PUi.DrawUi(screen, (0, 600), Matcher.money, Matcher.peoples, Matcher.product, Matcher.ecology,
+               Matcher.PeoplesHapines, Matcher.Volts, Matcher.Water)
+    PUi.DrawPicture(screen, (0, 600), Matcher.ecology)
 
     # Update the display
     pygame.display.update()

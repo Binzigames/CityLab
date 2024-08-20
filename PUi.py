@@ -34,20 +34,27 @@ def DrawUi(screen, position, money, peoples, products, eco, happiness, volts, wa
         text_rect = text_surface.get_rect(topleft=pos)
         screen.blit(text_surface, text_rect)
 
-def DrawPicture(screen,position , ecology):
+def DrawPicture(screen, position, ecology):
     try:
-        StandartPanorama = pygame.image.load("panarama_city.png").convert_alpha(),
-        DirtyPanrama = pygame.image.load("panarama_dirty_city.png").convert_alpha()
+        # Load images correctly (without comma to avoid creating tuples)
+        StandartPanorama = pygame.image.load("panarama_city.png").convert_alpha()
+        DirtyPanorama = pygame.image.load("panarama_dirty_city.png").convert_alpha()
     except pygame.error as e:
         print(f"Unable to load image: {e}")
         return
-    corect_panarama = None
-    isStart= True
-    if isStart:
-        corect_panarama = StandartPanorama
+
+    # Determine which panorama to use
     if ecology < 20:
-        corect_panarama = DirtyPanrama
+        corect_panarama = DirtyPanorama
+    else:
+        corect_panarama = StandartPanorama
+
 
     scaled_image = pygame.transform.scale(corect_panarama, (480, 300))
-    picture_position = (position[0] + 500, position[1] + 0)
+
+
+    picture_position = (position[0] + 500, position[1])
+
+
     screen.blit(scaled_image, picture_position)
+

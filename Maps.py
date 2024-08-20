@@ -38,6 +38,8 @@ MapCursor = [
 
 ]
 cursor_x, cursor_y = 0, 0
+columns = 15
+rows = 9
 
 # materials
 grass = ("grass.png")
